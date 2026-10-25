@@ -69,3 +69,13 @@ class ImagenDicom:
             self.volumen = np.stack(cortes_grandes, axis=0)
 
             self.voxel_vol = (self.voxel_alto / 2, self.voxel_largo / 2, self.voxel_ancho)
+
+    def volumen_a_usar(self):
+        if self.volumen_rotado is not None:
+            return self.volumen_rotado
+        return self.volumen
+ 
+    def normalizar_uint8(self, imagen):
+        imagen = imagen.astype(np.float32)
+        imagen = cv2.normalize(imagen, None, 0, 255, cv2.NORM_MINMAX)
+        return imagen.astype(np.uint8)
