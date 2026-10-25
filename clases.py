@@ -185,3 +185,13 @@ class ImagenDicom:
         ancho_mm = w * mm_pixel
         alto_mm = h * mm_pixel
         print("Area de la zona de interes:", round(area_mm2, 2), "mm2")
+
+        rgb = cv2.cvtColor(imagen, cv2.COLOR_GRAY2RGB)
+        rgb_limpia = rgb.copy()
+        radio = int(max(w, h) / 2) + 5
+        cv2.circle(rgb, (cx, cy), radio, (255, 0, 0), 2)
+
+        texto = "Ancho: " + str(round(ancho_mm, 1)) + " mm  Alto: " + str(round(alto_mm, 1)) + " mm"
+        escala = ancho_img / 800
+        cv2.putText(rgb, texto, (10, int(30 * max(escala, 0.5) + 10)), cv2.FONT_HERSHEY_SIMPLEX,
+                    max(escala, 0.5), (255, 255, 0), 2)
