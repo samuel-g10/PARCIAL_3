@@ -237,10 +237,9 @@ class ImagenDicom:
 
 
 class GestorImagenes:
-    """Guarda varios objetos ImagenDicom y se encarga de cargarlos."""
 
     def __init__(self):
-        self.imagenes = {}   # nombre -> objeto ImagenDicom
+        self.imagenes = {}
 
     def cargar_carpeta(self, ruta, nombre=None):
         if nombre is None:
@@ -249,7 +248,7 @@ class GestorImagenes:
         print("Cargado:", nombre)
 
     def cargar_carpetas_clase(self, ruta_datos):
-        """Busca en PPMI, Sarcoma y T2 todas las carpetas que tengan .dcm y crea un objeto por carpeta."""
+
         for clase in ["PPMI", "Sarcoma", "T2"]:
             ruta_clase = os.path.join(ruta_datos, clase)
             if not os.path.isdir(ruta_clase):

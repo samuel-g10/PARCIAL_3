@@ -9,3 +9,10 @@ def pedir_entero(mensaje, minimo, maximo):
             if minimo <= numero <= maximo:
                 return numero
         print("Valor no válido. Debe ser un entero entre", minimo, "y", maximo)
+
+def pedir_decimal(mensaje):
+    while True:
+        try:
+            return float(input(mensaje))
+        except ValueError:
+            print("Escribe un numero.")
