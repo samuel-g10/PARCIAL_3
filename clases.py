@@ -111,7 +111,6 @@ def normalizar_y_ecualizar(self, indice):
     ejes[1].set_title("Histograma después de ecualizar")
     ejes[2].imshow(ecualizado, cmap="gray")
     ejes[2].set_title("Imagen ecualizada (corte " + str(indice) + ")")
-    ejes[2].axis("off")
     plt.tight_layout()
 
     base = os.path.join(self.carpeta_salida, self.nombre + "_ecualizado_corte" + str(indice))
@@ -121,3 +120,4 @@ def normalizar_y_ecualizar(self, indice):
     print("Guardado:", base + "_imagen.png")
     plt.show()
     plt.close()
+
