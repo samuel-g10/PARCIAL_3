@@ -234,3 +234,39 @@ class ImagenDicom:
         print("Voxel del volumen (alto, largo, ancho) mm:", self.voxel_vol)
         if self.angulo is not None:
             print("Angulo corregido:", self.angulo, "grados")
+
+
+class GestorImagenes:
+    """Guarda varios objetos ImagenDicom y se encarga de cargarlos."""
+
+    def __init__(self):
+        self.imagenes = {}   # nombre -> objeto ImagenDicom
+
+    def cargar_carpeta(self, ruta, nombre=None):
+        if nombre is None:
+            nombre = os.path.basename(os.path.normpath(ruta))
+        self.imagenes[nombre] = ImagenDicom(ruta, nombre)
+        print("Cargado:", nombre)
+
+    def cargar_carpetas_clase(self, ruta_datos):
+        """Busca en PPMI, Sarcoma y T2 todas las carpetas que tengan .dcm y crea un objeto por carpeta."""
+        for clase in ["PPMI", "Sarcoma", "T2"]:
+            ruta_clase = os.path.join(ruta_datos, clase)
+            if not os.path.isdir(ruta_clase):
+                print("No existe la carpeta", ruta_clase)
+                continue
+
+            for carpeta, subcarpetas, archivos in os.walk(ruta_clase):
+                hay_dcm = False
+                for a in archivos:
+                    if a.lower().endswith(".dcm"):
+                        hay_dcm = True
+                if hay_dcm:
+                    nombre = os.path.relpath(carpeta, ruta_datos).replace(os.sep, "_")
+                    self.cargar_carpeta(carpeta, nombre)
+
+    def listar(self):
+        nombres = list(self.imagenes.keys())
+        for i in range(len(nombres)):
+            print(i + 1, "-", nombres[i])
+        return nombres
