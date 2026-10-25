@@ -139,3 +139,10 @@ class ImagenDicom:
         aspecto = mm_vertical / mm_horizontal
         corte = cv2.resize(corte, None, fx=1, fy=aspecto, interpolation=cv2.INTER_LINEAR)
         mm_pixel = mm_horizontal
+        imagen = self.normalizar_uint8(corte)
+        
+        if umbral == 0:
+            umbral, binaria = cv2.threshold(imagen, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+        else:
+            umbral, binaria = cv2.threshold(imagen, umbral, 255, cv2.THRESH_BINARY_INV)
+        print("Umbral usado:", umbral)
