@@ -79,3 +79,18 @@ class ImagenDicom:
         imagen = imagen.astype(np.float32)
         imagen = cv2.normalize(imagen, None, 0, 255, cv2.NORM_MINMAX)
         return imagen.astype(np.uint8)
+
+def corregirAngulo(self, angulo):
+        cortes, filas, columnas = self.volumen.shape
+        centro = (columnas / 2, filas / 2)
+
+        self.matriz_rotacion = cv2.getRotationMatrix2D(centro, angulo, 1.0)
+
+        rotados = []
+        for i in range(cortes):
+            corte_rotado = cv2.warpAffine(self.volumen[i], self.matriz_rotacion, (columnas, filas))
+            rotados.append(corte_rotado)
+
+        self.volumen_rotado = np.stack(rotados, axis=0)
+        self.angulo = angulo
+        print("Volumen rotado", angulo, "grados. Guardado en volumen_rotado.")
