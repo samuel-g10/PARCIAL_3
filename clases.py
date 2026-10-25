@@ -80,44 +80,46 @@ class ImagenDicom:
         imagen = cv2.normalize(imagen, None, 0, 255, cv2.NORM_MINMAX)
         return imagen.astype(np.uint8)
 
-def corregirAngulo(self, angulo):
-        cortes, filas, columnas = self.volumen.shape
-        centro = (columnas / 2, filas / 2)
+    def corregirAngulo(self, angulo):
+            cortes, filas, columnas = self.volumen.shape
+            centro = (columnas / 2, filas / 2)
 
-        self.matriz_rotacion = cv2.getRotationMatrix2D(centro, angulo, 1.0)
+            self.matriz_rotacion = cv2.getRotationMatrix2D(centro, angulo, 1.0)
 
-        rotados = []
-        for i in range(cortes):
-            corte_rotado = cv2.warpAffine(self.volumen[i], self.matriz_rotacion, (columnas, filas))
-            rotados.append(corte_rotado)
+            rotados = []
+            for i in range(cortes):
+                corte_rotado = cv2.warpAffine(self.volumen[i], self.matriz_rotacion, (columnas, filas))
+                rotados.append(corte_rotado)
 
-        self.volumen_rotado = np.stack(rotados, axis=0)
-        self.angulo = angulo
-        print("Volumen rotado", angulo, "grados. Guardado en volumen_rotado.")
+            self.volumen_rotado = np.stack(rotados, axis=0)
+            self.angulo = angulo
+            print("Volumen rotado", angulo, "grados. Guardado en volumen_rotado.")
 
-def normalizar_y_ecualizar(self, indice):
+    def normalizar_y_ecualizar(self, indice):
     
-    self.volumen_copia = self.volumen_a_usar().copy()
+        self.volumen_copia = self.volumen_a_usar().copy()
 
-    corte = self.volumen_copia[indice]
-    corte8 = self.normalizar_uint8(corte)
-    ecualizado = cv2.equalizeHist(corte8)
-    self.corte_ecualizado = ecualizado
+        corte = self.volumen_copia[indice]
+        corte8 = self.normalizar_uint8(corte)
+        ecualizado = cv2.equalizeHist(corte8)
+        self.corte_ecualizado = ecualizado
 
-    figura, ejes = plt.subplots(1, 3, figsize=(15, 4))
-    ejes[0].hist(corte8.ravel(), bins=256, range=(0, 256))
-    ejes[0].set_title("Histograma antes de ecualizar")
-    ejes[1].hist(ecualizado.ravel(), bins=256, range=(0, 256))
-    ejes[1].set_title("Histograma después de ecualizar")
-    ejes[2].imshow(ecualizado, cmap="gray")
-    ejes[2].set_title("Imagen ecualizada (corte " + str(indice) + ")")
-    plt.tight_layout()
+        figura, ejes = plt.subplots(1, 3, figsize=(15, 4))
+        ejes[0].hist(corte8.ravel(), bins=256, range=(0, 256))
+        ejes[0].set_title("Histograma antes de ecualizar")
+        ejes[1].hist(ecualizado.ravel(), bins=256, range=(0, 256))
+        ejes[1].set_title("Histograma después de ecualizar")
+        ejes[2].imshow(ecualizado, cmap="gray")
+        ejes[2].set_title("Imagen ecualizada (corte " + str(indice) + ")")
+        plt.tight_layout()
 
-    base = os.path.join(self.carpeta_salida, self.nombre + "_ecualizado_corte" + str(indice))
-    plt.savefig(base + "_grafico.png")
-    cv2.imwrite(base + "_imagen.png", ecualizado)
-    print("Guardado:", base + "_grafico.png")
-    print("Guardado:", base + "_imagen.png")
-    plt.show()
-    plt.close()
+        base = os.path.join(self.carpeta_salida, self.nombre + "_ecualizado_corte" + str(indice))
+        plt.savefig(base + "_grafico.png")
+        cv2.imwrite(base + "_imagen.png", ecualizado)
+        print("Guardado:", base + "_grafico.png")
+        print("Guardado:", base + "_imagen.png")
+        plt.show()
+        plt.close()
 
+    def segmentar(self, plano, indice, umbral, tam_kernel, iteraciones, numero_zona=1):
+        volumen = self.volumen_a_usar()
