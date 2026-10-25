@@ -34,7 +34,7 @@ class ImagenDicom:
         self.escalar_y_reconstruir()
 
     def cargar_dicom(self):
-        
+
         datasets = []
         for archivo in os.listdir(self.carpeta):
             if archivo.lower().endswith(".dcm"):
@@ -59,3 +59,13 @@ class ImagenDicom:
         for ds in datasets:
             cortes.append(ds.pixel_array)
         self.matriz_pixeles = np.stack(cortes, axis=0)
+
+    def escalar_y_reconstruir(self):
+            
+            cortes_grandes = []
+            for corte in self.matriz_pixeles:
+                grande = cv2.resize(corte, None, fx=2, fy=2, interpolation=cv2.INTER_LINEAR)
+                cortes_grandes.append(grande)
+            self.volumen = np.stack(cortes_grandes, axis=0)
+
+            self.voxel_vol = (self.voxel_alto / 2, self.voxel_largo / 2, self.voxel_ancho)
