@@ -201,3 +201,25 @@ class ImagenDicom:
         y1 = max(cy - radio, 0)
         y2 = min(cy + radio, alto_img)
         recorte = rgb_limpia[y1:y2, x1:x2]
+
+        figura, ejes = plt.subplots(2, 2, figsize=(12, 12))
+        ejes[0, 0].imshow(imagen, cmap="gray")
+        ejes[0, 0].set_title("Corte " + plano + " " + str(indice) + " (uint8)")
+        ejes[0, 1].imshow(abierta, cmap="gray")
+        ejes[0, 1].set_title("Segmentacion despues de la apertura")
+        ejes[1, 0].imshow(rgb)
+        ejes[1, 0].set_title("Zona de interes (area = " + str(round(area_mm2, 1)) + " mm2)")
+        ejes[1, 1].imshow(recorte)
+        ejes[1, 1].set_title("Region recortada: " + str(round(ancho_mm, 1)) + " x "
+                             + str(round(alto_mm, 1)) + " mm")
+        plt.tight_layout(pad=3, h_pad=4, w_pad=4)
+
+        base = os.path.join(self.carpeta_salida,
+                            self.nombre + "_segmentacion_" + plano + "_" + str(indice))
+        plt.savefig(base + "_grafico.png")
+        cv2.imwrite(base + "_circulo.png", cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR))
+        print("Guardado:", base + "_grafico.png")
+        print("Guardado:", base + "_circulo.png")
+        plt.show()
+        plt.close()
+        
