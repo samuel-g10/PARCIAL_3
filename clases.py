@@ -146,3 +146,6 @@ class ImagenDicom:
         else:
             umbral, binaria = cv2.threshold(imagen, umbral, 255, cv2.THRESH_BINARY_INV)
         print("Umbral usado:", umbral)
+
+        kernel = np.ones((tam_kernel, tam_kernel), np.uint8)
+        abierta = cv2.morphologyEx(binaria, cv2.MORPH_OPEN, kernel, iterations=iteraciones)
