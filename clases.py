@@ -180,3 +180,8 @@ class ImagenDicom:
         h = stats[mejor, cv2.CC_STAT_HEIGHT]
         cx = int(centroides[mejor][0])
         cy = int(centroides[mejor][1])
+
+        area_mm2 = mayor_area * mm_pixel * mm_pixel
+        ancho_mm = w * mm_pixel
+        alto_mm = h * mm_pixel
+        print("Area de la zona de interes:", round(area_mm2, 2), "mm2")
