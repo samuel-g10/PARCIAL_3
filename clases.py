@@ -222,4 +222,15 @@ class ImagenDicom:
         print("Guardado:", base + "_circulo.png")
         plt.show()
         plt.close()
-        
+
+    def mostrar_info(self):
+        print("Nombre del objeto:", self.nombre)
+        print("Paciente:", self.nombre_paciente)
+        print("Modalidad:", self.modalidad)
+        print("Filas x Columnas (original):", self.filas, "x", self.columnas)
+        print("Numero de cortes:", self.matriz_pixeles.shape[0])
+        print("Voxel original (alto, largo, ancho) mm:", self.voxel_alto, self.voxel_largo, self.voxel_ancho)
+        print("Volumen 3D (cortes, filas, columnas):", self.volumen.shape)
+        print("Voxel del volumen (alto, largo, ancho) mm:", self.voxel_vol)
+        if self.angulo is not None:
+            print("Angulo corregido:", self.angulo, "grados")
