@@ -94,3 +94,30 @@ def corregirAngulo(self, angulo):
         self.volumen_rotado = np.stack(rotados, axis=0)
         self.angulo = angulo
         print("Volumen rotado", angulo, "grados. Guardado en volumen_rotado.")
+
+def normalizar_y_ecualizar(self, indice):
+    
+    self.volumen_copia = self.volumen_a_usar().copy()
+
+    corte = self.volumen_copia[indice]
+    corte8 = self.normalizar_uint8(corte)
+    ecualizado = cv2.equalizeHist(corte8)
+    self.corte_ecualizado = ecualizado
+
+    figura, ejes = plt.subplots(1, 3, figsize=(15, 4))
+    ejes[0].hist(corte8.ravel(), bins=256, range=(0, 256))
+    ejes[0].set_title("Histograma antes de ecualizar")
+    ejes[1].hist(ecualizado.ravel(), bins=256, range=(0, 256))
+    ejes[1].set_title("Histograma después de ecualizar")
+    ejes[2].imshow(ecualizado, cmap="gray")
+    ejes[2].set_title("Imagen ecualizada (corte " + str(indice) + ")")
+    ejes[2].axis("off")
+    plt.tight_layout()
+
+    base = os.path.join(self.carpeta_salida, self.nombre + "_ecualizado_corte" + str(indice))
+    plt.savefig(base + "_grafico.png")
+    cv2.imwrite(base + "_imagen.png", ecualizado)
+    print("Guardado:", base + "_grafico.png")
+    print("Guardado:", base + "_imagen.png")
+    plt.show()
+    plt.close()
