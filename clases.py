@@ -149,3 +149,34 @@ class ImagenDicom:
 
         kernel = np.ones((tam_kernel, tam_kernel), np.uint8)
         abierta = cv2.morphologyEx(binaria, cv2.MORPH_OPEN, kernel, iterations=iteraciones)
+
+        total, etiquetas, stats, centroides = cv2.connectedComponentsWithStats(abierta)
+        alto_img, ancho_img = abierta.shape
+
+        zonas = []   # lista de (area, etiqueta)
+        for i in range(1, total):
+            x = stats[i, cv2.CC_STAT_LEFT]
+            y = stats[i, cv2.CC_STAT_TOP]
+            w = stats[i, cv2.CC_STAT_WIDTH]
+            h = stats[i, cv2.CC_STAT_HEIGHT]
+            area = stats[i, cv2.CC_STAT_AREA]
+            toca_borde = (x == 0 or y == 0 or x + w >= ancho_img or y + h >= alto_img)
+            if not toca_borde:
+                zonas.append((area, i))
+
+        if len(zonas) == 0:
+            print("No se encontro ninguna zona de interes. Prueba otro umbral o kernel mas pequeno.")
+            return
+
+        zonas.sort(reverse=True)
+        print("Zonas encontradas:", len(zonas))
+        if numero_zona > len(zonas):
+            numero_zona = len(zonas)
+            print("Solo hay", len(zonas), "zonas, se usa la ultima.")
+        mayor_area = zonas[numero_zona - 1][0]
+        mejor = zonas[numero_zona - 1][1]
+
+        w = stats[mejor, cv2.CC_STAT_WIDTH]
+        h = stats[mejor, cv2.CC_STAT_HEIGHT]
+        cx = int(centroides[mejor][0])
+        cy = int(centroides[mejor][1])
