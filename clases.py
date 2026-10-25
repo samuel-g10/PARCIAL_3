@@ -195,3 +195,9 @@ class ImagenDicom:
         escala = ancho_img / 800
         cv2.putText(rgb, texto, (10, int(30 * max(escala, 0.5) + 10)), cv2.FONT_HERSHEY_SIMPLEX,
                     max(escala, 0.5), (255, 255, 0), 2)
+
+        x1 = max(cx - radio, 0)
+        x2 = min(cx + radio, ancho_img)
+        y1 = max(cy - radio, 0)
+        y2 = min(cy + radio, alto_img)
+        recorte = rgb_limpia[y1:y2, x1:x2]
