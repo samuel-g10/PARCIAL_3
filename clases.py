@@ -135,3 +135,7 @@ class ImagenDicom:
             corte = volumen[:, :, indice]
             mm_vertical = self.voxel_vol[2]
             mm_horizontal = self.voxel_vol[0]
+
+        aspecto = mm_vertical / mm_horizontal
+        corte = cv2.resize(corte, None, fx=1, fy=aspecto, interpolation=cv2.INTER_LINEAR)
+        mm_pixel = mm_horizontal
