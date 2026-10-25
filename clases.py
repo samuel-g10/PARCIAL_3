@@ -123,3 +123,15 @@ class ImagenDicom:
 
     def segmentar(self, plano, indice, umbral, tam_kernel, iteraciones, numero_zona=1):
         volumen = self.volumen_a_usar()
+        if plano == "transversal":
+            corte = volumen[indice, :, :]
+            mm_vertical = self.voxel_vol[0]
+            mm_horizontal = self.voxel_vol[1]
+        elif plano == "coronal":
+            corte = volumen[:, indice, :]
+            mm_vertical = self.voxel_vol[2]
+            mm_horizontal = self.voxel_vol[1]
+        else:  # sagital
+            corte = volumen[:, :, indice]
+            mm_vertical = self.voxel_vol[2]
+            mm_horizontal = self.voxel_vol[0]
